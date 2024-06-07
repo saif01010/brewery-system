@@ -37,11 +37,13 @@ const Home = () => {
         <ul>
           {breweries.map((brewery) => (
             <li key={brewery.id}>
-              <Link href={`/brewery/${brewery.id}`}>
+             
                {brewery.name}
-              </Link>
               <p>{brewery.street}, {brewery.city}, {brewery.state}</p>
               <p>Phone: {brewery.phone}</p>
+              <Link href={`/brewery/${brewery.id}`}>
+              Add Review
+              </Link>
 
             </li>
           ))}
