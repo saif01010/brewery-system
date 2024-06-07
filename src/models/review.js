@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-const userShcema = new Schema({
+const reviewSchema = new Schema({
     rating:{
         type: String,
         required: true
@@ -21,6 +21,6 @@ const userShcema = new Schema({
     
 }, {timestamps: true});
 
-let User = mongoose.models.User || mongoose.model('User', userShcema);
+let Review = mongoose.models.Review || mongoose.model('Review', reviewSchema);
 
-export default User;
+export default Review;
