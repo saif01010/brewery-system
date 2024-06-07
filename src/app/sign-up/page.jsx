@@ -1,50 +1,128 @@
 'use client'
-import { useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import React, {  useEffect, useState } from 'react'
+import { Form, 
+         FormControl,
+         FormField,
+         FormItem,
+         FormLabel,
+         FormMessage } from '@/components/ui/form'
+import {useRouter} from 'next/navigation'
+import {useToast} from '@/components/ui/use-toast'
+import  {useForm} from 'react-hook-form'
+import axios ,{AxiosError}from 'axios'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
+const SignUpPage = () => {
+    const [fullName, setfullName] = useState('')
+    const [isSubmiting, setIsSubmiting] = useState(false)
+    const router = useRouter()
+    const {toast} = useToast()
+    const form = useForm({
+      defaultValues:{
+        fullName: '',
+        email: '',
+        password: '',
+      }
+    })
+    
+   const handleSubmit = async (data) => {
+      setIsSubmiting(true)
+      try {
+        const response = await axios.post('/api/sign-up',data);
+        toast({
+          title: "Success",
+          description: response.data.message,
+        })
+        router.replace(`/sign-in`)
 
-const SignUp = () => {
-  const [fullName, setfullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('/api/sign-up', { fullName, email, password });
-      router.push('/sign-in');
-    } catch (error) {
-      console.error('Error registering', error);
-    }
-  };
+      } catch (error) {
+        console.error('Error during sign-up:', error);
+        const axiosError = error ;
+          setfullNameMessage(
+            axiosError.response?.data.message ?? 'Error checking fullName'
+          );
+      }finally{
+        setIsSubmiting(false)
+      }
+   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={fullName}
-        onChange={(e) => setfullName(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Sign Up</button>
-    </form>
-  );
-};
+    <div className="flex justify-center items-center min-h-screen bg-gray-800">
+      <div className='w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md'>
+      <div className="text-center">
+          <p className="mb-4">Sign up</p>
+        </div>
+        <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>fullName</FormLabel>
+              <FormControl>
+                <Input placeholder="Full Name" {...field}
+                onChange={(e)=>{
+                  field.onChange(e)
+                  setfullName(e.target.value)
+                }}
+              />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+           <FormField
+              name="email"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <Input {...field} name="email" />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-export default SignUp;
+            <FormField
+              name="password"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <Input type="password" {...field} name="password" />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+       <Button type="submit" className='w-full' disabled={isSubmiting}>
+              {isSubmiting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                'Sign Up'
+              )}
+            </Button>
+      </form>
+    </Form>
+    <div className="text-center mt-4">
+          <p>
+            Already a member?{' '}
+            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+              Sign in
+            </Link>
+          </p>
+        </div>
+
+      </div>
+      
+    </div>
+  )
+}
+
+export default SignUpPage

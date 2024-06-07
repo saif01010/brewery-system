@@ -45,7 +45,7 @@ const brewery =  breweryById(id).then((data) => data[0]);
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
     {/* //   <h2>{brewery.name}</h2>
     //   <p>{brewery.street}, {brewery.city}, {brewery.state}</p>
     //   <p>Phone: {brewery.phone}</p>
@@ -60,33 +60,48 @@ const brewery =  breweryById(id).then((data) => data[0]);
           </li>
         ))}
       </ul> */}
-
-      {session ? (
-        <form onSubmit={handleReviewSubmit}>
-          <label>Rating</label>
-          <select value={rating} onChange={(e) => setRating(e.target.value)}>
+  <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
+    {session ? (
+      <form onSubmit={handleReviewSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Rating</label>
+          <select
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             {[1, 2, 3, 4, 5].map((num) => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>
+        </div>
 
-          <label>Description</label>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
 
-          <button type="submit">Submit Review</button>
-        </form>
-      ) : (
-        <>
-        <p>Please log in to post a review.</p>
-        <Link href="sign-in">Log in</Link>
-        </>
-      )}
-    </div>
-  );
+        <button
+          type="submit"
+          className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Submit Review
+        </button>
+      </form>
+    ) : (
+      <div className="text-center">
+        <p className="mb-4">Please log in to post a review.</p>
+        <Link href="sign-in" className="text-blue-500 hover:underline">Log in</Link>
+      </div>
+    )}
+  </div>
+</div>
+  )
 };
 
 
