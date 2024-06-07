@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 async function breweryById(id) {
   const url = `https://api.openbrewerydb.org/v1/breweries?by_ids=${id}`;
@@ -45,10 +46,10 @@ const brewery =  breweryById(id).then((data) => data[0]);
 
   return (
     <div>
-      <h2>{brewery.name}</h2>
-      <p>{brewery.street}, {brewery.city}, {brewery.state}</p>
-      <p>Phone: {brewery.phone}</p>
-      <a href={brewery.website_url}>Website</a>
+    {/* //   <h2>{brewery.name}</h2>
+    //   <p>{brewery.street}, {brewery.city}, {brewery.state}</p>
+    //   <p>Phone: {brewery.phone}</p>
+    //   <a href={brewery.website_url}>Website</a> */}
 
       {/* <h3>Reviews</h3>
       <ul>
@@ -79,7 +80,10 @@ const brewery =  breweryById(id).then((data) => data[0]);
           <button type="submit">Submit Review</button>
         </form>
       ) : (
+        <>
         <p>Please log in to post a review.</p>
+        <Link href="sign-in">Log in</Link>
+        </>
       )}
     </div>
   );
