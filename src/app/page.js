@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { MessageCard } from '@/components/Card';
 
 const Home = () => {
   const [searchType, setSearchType] = useState('city');
@@ -17,7 +18,7 @@ const Home = () => {
   };
 
   return ( 
-    <div>
+    <div className='my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl'>
       <form onSubmit={handleSearch}>
         <select value={searchType} onChange={(e) => setSearchType(e.target.value)}>
           <option value="city">City</option>
@@ -32,23 +33,15 @@ const Home = () => {
         />
         <button type="submit">Search</button>
       </form>
-
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
       {breweries.length > 0 && (
-        <ul>
+        <div>
           {breweries.map((brewery) => (
-            <li key={brewery.id}>
-             
-               {brewery.name}
-              <p>{brewery.street}, {brewery.city}, {brewery.state}</p>
-              <p>Phone: {brewery.phone}</p>
-              <Link href={`/brewery/${brewery.id}`}>
-              Add Review
-              </Link>
-
-            </li>
+            <MessageCard key={brewery.id} message={brewery} />
           ))}
-        </ul>
+        </div>
       )}
+      </div>
     </div>
   );
 };
