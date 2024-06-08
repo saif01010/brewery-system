@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { MessageCard } from '@/components/Card';
@@ -24,20 +24,26 @@ const Brewery = () => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
   const { data: session } = useSession();
   const { id } = useParams();
-
-  useEffect(() => {
-    async function fetchBreweryData() {
-      try {
-        const data = await breweryById(id);
-        setBrewery(data);
-        setLoading(false);
-      } catch (e) {
-        setError(e.message);
-        setLoading(false);
+    useEffect(() => {
+      async function fetchBreweryData() {
+        try {
+          const data = await breweryById(id);
+          setBrewery(data);
+          setLoading(false);
+        } catch (e) {
+          setError(e.message);
+          setLoading(false);
+        }
       }
-    }
+
+  if (!session) {
+    router.push('/sign-in');
+    return;
+  }
+
 
     async function fetchReviews() {
       try {
@@ -101,7 +107,7 @@ console.log(reviews)
       </div>
       <h1 className="text-2xl font-bold text-center">Add your Review</h1>
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg mt-8">
-        {session ? (
+        
           <form onSubmit={handleReviewSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Rating</label>
@@ -133,12 +139,7 @@ console.log(reviews)
               Submit Review
             </button>
           </form>
-        ) : (
-          <div className="text-center">
-            <p className="mb-4">Please log in to post a review.</p>
-            <Link href="/sign-in" className="text-blue-500 hover:underline">Log in</Link>
-          </div>
-        )}
+        
       </div>
     </div>
   );

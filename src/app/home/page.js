@@ -9,6 +9,12 @@ const Home = () => {
   const [searchType, setSearchType] = useState('city');
   const [query, setQuery] = useState('');
   const [breweries, setBreweries] = useState([]);
+  const { data: session } = useSession();
+  const router = useRouter();
+  if (!session) {
+    router.push('/sign-in');
+    return;
+  }
   // const router = useRouter();
   // const { data: session } = useSession();
   // if (!session) {

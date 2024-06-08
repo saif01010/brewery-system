@@ -39,7 +39,7 @@ const LoginPage = () => {
           description: result.status,
           variant: 'default'
         })
-        router.replace('/')
+        router.replace('/home')
       }
 
 }
