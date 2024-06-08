@@ -2,11 +2,20 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { MessageCard } from '@/components/Card';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Home = () => {
   const [searchType, setSearchType] = useState('city');
   const [query, setQuery] = useState('');
   const [breweries, setBreweries] = useState([]);
+  // const router = useRouter();
+  // const { data: session } = useSession();
+  // if (!session) {
+  //   alert('You need to be logged in.');
+  //   router.push('/sign-in');
+  //   return;
+  // }
 
   
 

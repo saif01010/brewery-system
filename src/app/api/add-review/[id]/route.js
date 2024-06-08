@@ -6,9 +6,9 @@ import mongoose from "mongoose";
 
 export async function POST(req,ids) {
     await connectDB();
-    const questionId = ids.params.id;
+    const breweryId = ids.params.id;
 
-    console.log(questionId)
+    console.log(breweryId)
     const {rating,description} = await req.json();
     console.log(rating,description)
     const session = await getServerSession(authOptions)
@@ -17,12 +17,13 @@ export async function POST(req,ids) {
     if(!user){
         return Response.json({success:false,message:'User not found'},{status:400})
     }
-    const userId = new mongoose.Types.ObjectId(user._id);
+    const username = user.fullName;
     try {
+        const numRating = parseInt(rating)
         const review = new Review({
-            breweryId:questionId,
-            user:userId,
-            rating,
+            breweryId:breweryId,
+            user:username,
+            rating:numRating,
             description
         });
         await review.save();

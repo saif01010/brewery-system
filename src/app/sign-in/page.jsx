@@ -82,16 +82,14 @@ const LoginPage = () => {
             <Button className='w-full' type="submit">Sign In</Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
-          <p>
-            Not a member yet?{' '}
-            <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
-              Sign up
-            </Link>
-          </p>
-      </div>
       
     </div>
+        {/* <div className="text-center mt-4">
+          <p>
+            Not a member yet?{' '}
+           { router.replace('/sign-up')}
+          </p>
+      </div> */}
     
     </div>
   )

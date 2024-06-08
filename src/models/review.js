@@ -1,8 +1,9 @@
 import mongoose, {Schema} from "mongoose";
+import { number } from "zod";
 
 const reviewSchema = new Schema({
     rating:{
-        type: String,
+        type: Number,
         required: true
     },
     description:{
@@ -14,7 +15,7 @@ const reviewSchema = new Schema({
         required: true
     },
     user:{
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         ref:'User',
         required: true
     },

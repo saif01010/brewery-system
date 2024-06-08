@@ -8,12 +8,15 @@ import {
 } from "@/components/ui/card"
 import { useToast } from "./ui/use-toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
   
 
 
 export const MessageCard = ({message}) => {
+  const router = useRouter();
     const messageId = message._id;
     const {toast} = useToast();
+    console.log(message)
     
   return (
     <Card>
@@ -26,7 +29,7 @@ export const MessageCard = ({message}) => {
             <CardDescription>City: {message.city}</CardDescription>
             
         </CardHeader>
-        <Link href={`/brewery/${message.id}`}>
+        <Link href={`/brewery/${message.id}`} >
         <CardFooter><button className=" hover:text-gray-400"> Add Review</button></CardFooter>
         </Link>
     </Card>
