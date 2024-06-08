@@ -5,8 +5,7 @@ import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { MessageCard } from '@/components/Card';
-import { ReviewCard } from '@/components/ReviewCard';
-
+import { ReviewCard } from '@/components/ReviewCard'; // Ensure this is correctly imported
 
 async function breweryById(id) {
   const url = `https://api.openbrewerydb.org/v1/breweries?by_ids=${id}`;
@@ -21,7 +20,6 @@ async function breweryById(id) {
 const Brewery = () => {
   const [brewery, setBrewery] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [allReviews, setAllReviews] = useState([]);
   const [rating, setRating] = useState(1);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
@@ -41,19 +39,17 @@ const Brewery = () => {
       }
     }
 
-    fetchBreweryData();
-  }, [id]);
-
-  useEffect(() => {
     async function fetchReviews() {
       try {
-        const response = await axios.get(`/api/get-all-review/${id}`);
-        setAllReviews(response.data.data);
+        const response = await axios.get(`/api/reviews/${id}`);
+        setReviews(response.data.data);
+        
       } catch (e) {
-        setError(e.message);
+        console.error('Failed to fetch reviews', e);
       }
     }
 
+    fetchBreweryData();
     fetchReviews();
   }, []);
 
@@ -64,13 +60,17 @@ const Brewery = () => {
       return;
     }
 
-    const response = await axios.post(`/api/add-review/${id}`, {
-      rating,
-      description,
-      username: session.user.fullName,
-    });
+    try {
+      const response = await axios.post(`/api/add-review/${id}`, {
+        rating,
+        description,
+        userId: session.user.id,
+      });
 
-    setReviews([...reviews, response.data]);
+      setReviews([...reviews, response.data]);
+    } catch (e) {
+      console.error('Failed to submit review', e);
+    }
   };
 
   if (loading) {
@@ -80,23 +80,26 @@ const Brewery = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
+console.log(reviews)
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100">
       {brewery && (
-        <MessageCard key={brewery.id} message={brewery} />
+        <div className="w-full">
+          <MessageCard key={brewery.id} message={brewery} className="w-full" />
+        </div>
       )}
 
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {allReviews.length > 0 && (
-          <div>
-            {allReviews.map((review) => (
-              <ReviewCard key={review._id} review={review} />
-            ))}
-          </div>
+      <h1 className="text-2xl font-bold text-center">Reviews</h1>
+      <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <ReviewCard key={review._id} review={review} />
+          ))
+        ) : (
+          <div>No reviews yet.</div>
         )}
       </div>
-      
+      <h1 className="text-2xl font-bold text-center">Add your Review</h1>
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg mt-8">
         {session ? (
           <form onSubmit={handleReviewSubmit} className="space-y-4">

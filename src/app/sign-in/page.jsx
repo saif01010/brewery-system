@@ -83,13 +83,15 @@ const LoginPage = () => {
           </form>
         </Form>
       
-    </div>
-        {/* <div className="text-center mt-4">
+        <div className="text-center mt-4">
           <p>
             Not a member yet?{' '}
-           { router.replace('/sign-up')}
+            <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
+              Sign up
+            </Link>
           </p>
-      </div> */}
+      </div> 
+    </div>
     
     </div>
   )
