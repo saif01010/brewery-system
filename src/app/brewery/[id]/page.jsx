@@ -8,18 +8,20 @@ import { ReviewCard } from '@/components/ReviewCard'; // Ensure this is correctl
 import { RatingCard } from '@/components/Rating';
 
 
+
 async function breweryById(id) {
   const url = `https://api.openbrewerydb.org/v1/breweries?by_ids=${id}`;
   try {
     const response = await axios.get(url);
     return response.data[0]; // Assuming the API returns an array of breweries
-  } catch (e) {
-    throw new Error(e.message);
-  }
-}
+    } catch (e) {
+      throw new Error(e.message);
+      }
+      }
 
+      
 const Brewery = () => {
-  const [brewery, setBrewery] = useState(null);
+        const [brewery, setBrewery] = useState(null);
   const [reviews, setReviews] = useState([]);
   // Add this line
   const [rating, setRating] = useState(1);
