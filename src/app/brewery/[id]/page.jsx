@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { MessageCard } from '@/components/Card';
 import { ReviewCard } from '@/components/ReviewCard'; // Ensure this is correctly imported
 import { RatingCard } from '@/components/Rating';
+import ReactStars from 'react-stars';
 
 
 
@@ -21,13 +21,11 @@ async function breweryById(id) {
 
       
 const Brewery = () => {
-        const [brewery, setBrewery] = useState(null);
+  const [brewery, setBrewery] = useState(null);
   const [reviews, setReviews] = useState([]);
-  // Add this line
   const [rating, setRating] = useState(1);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const router = useRouter();
   const { data: session } = useSession();
   const { id } = useParams();
@@ -45,7 +43,7 @@ const Brewery = () => {
     }
 
     fetchBreweryData();
-  }, [id]); // Ensure this runs only when `id` changes
+  }, [id]);
 
   useEffect(() => {
     async function fetchReviews() {
@@ -65,7 +63,8 @@ const Brewery = () => {
     return;
   }
 
-  const avgRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+  const avgRating = (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(2);
+  const lenght1 = reviews.length
   // console.log(avgRating)
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -83,18 +82,14 @@ const Brewery = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) { return <div>Loading...</div>; }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100">
       {brewery && (
         <div className="w-full">
-          <RatingCard key={brewery.id} message={brewery} totalRating= {avgRating}  className="w-full" />
+          <RatingCard key={brewery.id} message={brewery} totalRating= {avgRating} totalReview = {lenght1} className="w-full" />
         </div>
       )}
       <h1 className="text-2xl font-bold text-center">Add your Review</h1>
@@ -103,7 +98,7 @@ const Brewery = () => {
           <form onSubmit={handleReviewSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Rating</label>
-              <select
+              {/* <select
                 value={rating}
                 onChange={(e) => setRating(e.target.value)}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -111,7 +106,14 @@ const Brewery = () => {
                 {[1, 2, 3, 4, 5].map((num) => (
                   <option key={num} value={num}>{num}</option>
                 ))}
-              </select>
+              </select> */}
+              <ReactStars
+                count={5}
+                size={24}
+                color2={'#ffd700'}
+                value={rating}
+                onChange={setRating}
+              />
             </div>
 
             <div>
@@ -135,7 +137,7 @@ const Brewery = () => {
       </div>
       <h1 className="text-2xl font-bold text-center">Reviews</h1>
       <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {reviews.length > 0 ? (
+        { !loading && reviews.length > 0 ? (
          <div>
          { reviews.map((review) => (
             <ReviewCard key={review._id} review={review} />

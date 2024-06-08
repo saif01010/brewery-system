@@ -11,7 +11,7 @@ import Link from "next/link";
   
 
 
-export const RatingCard = ({message,totalRating }) => {
+export const RatingCard = ({message,totalRating,totalReview }) => {
   isNaN(totalRating)? totalRating = 0: totalRating = totalRating 
   console.log(totalRating)
   return (
@@ -24,7 +24,7 @@ export const RatingCard = ({message,totalRating }) => {
             <CardDescription>Website: {message.website_url}</CardDescription>
             <CardDescription>State: {message.state}</CardDescription>
             <CardDescription>City: {message.city}</CardDescription>
-            <CardDescription>Rating: {totalRating}</CardDescription>
+            <CardDescription>Rating: {totalRating} ({totalReview})</CardDescription>
         </CardHeader>
         <Link href={`/brewery/${message.id}`} >
         <CardFooter><button className=" hover:text-gray-400"> Add Review</button></CardFooter>

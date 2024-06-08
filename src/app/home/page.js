@@ -14,12 +14,9 @@ const Home = () => {
   const router = useRouter();
   const {toast} = useToast();
   if (!session) {
-    router.push('/sign-in');
+    router.push('/sign-up');
     return;
   }
- useEffect
-
-  
 
   const handleSearch = async (e) => {
     e.preventDefault();
