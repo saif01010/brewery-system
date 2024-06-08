@@ -12,6 +12,10 @@ import Link from "next/link";
 
 
 export const RatingCard = ({message,totalRating }) => {
+
+  if(totalRating === NaN){
+    totalRating = 0
+  }
  
     
   return (
