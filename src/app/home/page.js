@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { MessageCard } from '@/components/Card';
 import { useSession } from 'next-auth/react';
@@ -15,13 +15,7 @@ const Home = () => {
     router.push('/sign-in');
     return;
   }
-  // const router = useRouter();
-  // const { data: session } = useSession();
-  // if (!session) {
-  //   alert('You need to be logged in.');
-  //   router.push('/sign-in');
-  //   return;
-  // }
+ useEffect
 
   
 
@@ -31,9 +25,10 @@ const Home = () => {
     setBreweries(response.data);
   };
 
+
   return ( 
-    <div className="relative my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-  <div className="absolute top-4 right-4 bg-white p-6 rounded shadow-lg">
+    <div className="relative  lg:mx-auto p-6 bg-white rounded w-full ">
+  <div className="absolute top-0 right-0 bg-white p-6 rounded shadow-lg">
     <form onSubmit={handleSearch} className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
       <select
         value={searchType}
@@ -43,6 +38,7 @@ const Home = () => {
         <option value="city">City</option>
         <option value="name">Name</option>
         <option value="type">Type</option>
+        <option value="state">State</option>
       </select>
       <input
         type="text"
@@ -59,7 +55,7 @@ const Home = () => {
       </button>
     </form>
   </div>
-  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+  <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
     {breweries.length > 0 && (
       <div>
         {breweries.map((brewery) => (

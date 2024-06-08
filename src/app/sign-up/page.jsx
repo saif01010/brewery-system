@@ -64,7 +64,7 @@ const SignUpPage = () => {
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>fullName</FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
                 <Input placeholder="Full Name" {...field}
                 onChange={(e)=>{

@@ -11,7 +11,7 @@ import Link from "next/link";
   
 
 
-export const MessageCard = ({message }) => {
+export const RatingCard = ({message,totalRating }) => {
  
     
   return (
@@ -24,7 +24,7 @@ export const MessageCard = ({message }) => {
             <CardDescription>Website: {message.website_url}</CardDescription>
             <CardDescription>State: {message.state}</CardDescription>
             <CardDescription>City: {message.city}</CardDescription>
-            
+            <CardDescription>Rating: {totalRating}</CardDescription>
         </CardHeader>
         <Link href={`/brewery/${message.id}`} >
         <CardFooter><button className=" hover:text-gray-400"> Add Review</button></CardFooter>
