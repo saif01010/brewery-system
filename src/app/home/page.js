@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MessageCard } from '@/components/Card';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
 
 const Home = () => {
   const [searchType, setSearchType] = useState('city');
@@ -11,6 +12,7 @@ const Home = () => {
   const [breweries, setBreweries] = useState([]);
   const { data: session } = useSession();
   const router = useRouter();
+  const {toast} = useToast();
   if (!session) {
     router.push('/sign-in');
     return;
@@ -22,10 +24,17 @@ const Home = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     const response = await axios.get(`https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query}`);
+    if ( response.data.length === 0) {
+      toast({
+        title: 'No data found',
+        description: 'Search Again',
+        variant: 'destructive'
+      })
+    }
     setBreweries(response.data);
   };
 
-
+   
   return ( 
     <div className="relative  lg:mx-auto p-6 bg-white rounded w-full ">
   <div className="absolute top-0 right-0 bg-white p-6 rounded shadow-lg">
