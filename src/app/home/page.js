@@ -73,12 +73,13 @@ const Home = () => {
         </form>
       </div>
       <div className=" w-full mt-20 grid grid-cols-1 md:grid-cols-1 gap-10">
-      <p className=" text-gray-400">Found total {breweries.length} results</p>
+      {breweries.length > 0 && (<p className=" text-gray-400">Found total {breweries.length} results</p>)}
         {breweries.length > 0 ? (
           breweries.map((brewery) => (
             <MessageCard key={brewery.id} message={brewery} />
           ))
         ) : (
+
           <div className='!mt-0'>Search Brewery By Name, City, Types and State</div>
         )}
       </div>
