@@ -1,11 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { ReviewCard } from '@/components/ReviewCard'; // Ensure this is correctly imported
 import { RatingCard } from '@/components/Rating';
 import ReactStars from 'react-stars';
+
 
 
 
@@ -16,8 +17,8 @@ async function breweryById(id) {
     return response.data[0];
     } catch (e) {
       throw new Error(e.message);
-      }
-      }
+    }
+}
 
       
 const Brewery = () => {
@@ -58,6 +59,8 @@ const Brewery = () => {
 
   const avgRating = (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(2);
   const lenght1 = reviews.length
+
+  
   // console.log(avgRating)
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -68,8 +71,8 @@ const Brewery = () => {
         rating,
         description
       });
-
-      setReviews([ response.data,...reviews]);
+      console.log(response.data)
+      setReviews([ response.data , ...reviews]);
     } catch (e) {
       console.error('Failed to submit review', e);
     }
@@ -79,16 +82,16 @@ const Brewery = () => {
 
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100">
+    <div className="flex flex-col p-2 items-center min-h-screen bg-gray-100">
       {brewery && (
         <div className="w-full">
           <RatingCard key={brewery.id} message={brewery} totalRating= {avgRating} totalReview = {lenght1} className="w-full" />
         </div>
       )}
-      <h1 className="text-2xl font-bold text-center">Add your Review</h1>
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg mt-8">
+      <h1 className="text-2xl mt-10 font-bold text-center">Add your Review</h1>
+      <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full mt-8">
         
-          <form onSubmit={handleReviewSubmit} className="space-y-4">
+          <form onSubmit={handleReviewSubmit} className=" space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Rating</label>
               {/* <select
@@ -129,10 +132,10 @@ const Brewery = () => {
           </form>
         
       </div>
-      <h1 className="text-2xl font-bold text-center">Reviews</h1>
-      <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <h1 className="text-2xl mt-10 font-bold text-center">Reviews</h1>
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-10">
         { !loading && reviews.length > 0 ? (
-         <div>
+         <div >
          { reviews.map((review) => (
             <ReviewCard key={review._id} review={review} />
           ))}
