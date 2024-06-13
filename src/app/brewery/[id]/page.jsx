@@ -26,8 +26,6 @@ const Brewery = () => {
   const [rating, setRating] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const { data: session } = useSession();
   const { id } = useParams();
   
   useEffect(() => {
@@ -71,7 +69,7 @@ const Brewery = () => {
         description
       });
 
-      setReviews([...reviews, response.data]);
+      setReviews([ response.data,...reviews]);
     } catch (e) {
       console.error('Failed to submit review', e);
     }

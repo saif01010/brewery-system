@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import axios from 'axios';
 import { MessageCard } from '@/components/Card';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ const Home = () => {
   const [breweries, setBreweries] = useState([]);
   const [isSubmiting,setIsSubmiting] = useState(false)
   // const { data: session } = useSession();
-  const router = useRouter();
+  // const router = useRouter();
   const {toast} = useToast();
   
   const handleSearch = async (e) => {
