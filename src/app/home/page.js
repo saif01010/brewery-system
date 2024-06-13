@@ -2,24 +2,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { MessageCard } from '@/components/Card';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
+import { Loader2 } from 'lucide-react';
+
 
 const Home = () => {
   const [searchType, setSearchType] = useState('city');
   const [query, setQuery] = useState('');
   const [breweries, setBreweries] = useState([]);
-  const { data: session } = useSession();
+  const [isSubmiting,setIsSubmiting] = useState(false)
+  // const { data: session } = useSession();
   const router = useRouter();
   const {toast} = useToast();
-  if (!session) {
-    router.push('/sign-up');
-    return;
-  }
-
+  
   const handleSearch = async (e) => {
     e.preventDefault();
+    setIsSubmiting(true)
     const response = await axios.get(`https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query}`);
     if ( response.data.length === 0) {
       toast({
@@ -29,6 +28,7 @@ const Home = () => {
       })
     }
     setBreweries(response.data);
+    setIsSubmiting(false)
   };
 
    
@@ -57,7 +57,12 @@ const Home = () => {
         type="submit"
         className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        Search
+       {isSubmiting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  
+                </>
+              ):('Search')} 
       </button>
     </form>
   </div>

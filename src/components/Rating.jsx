@@ -21,7 +21,7 @@ export const RatingCard = ({message,totalRating,totalReview }) => {
             <CardTitle>{message.name}</CardTitle>
             <CardDescription>Address: {message.address_1}</CardDescription>
             <CardDescription>Mobile: {message.phone}</CardDescription>
-            <CardDescription>Website: {message.website_url}</CardDescription>
+            <CardDescription>Website:<Link className=" text-blue-500 hover:text-sky-500" href={`${message.website_url}` } target="_blank">{message.website_url}</Link></CardDescription>
             <CardDescription>State: {message.state}</CardDescription>
             <CardDescription>City: {message.city}</CardDescription>
             <CardDescription>Rating: {totalRating} ({totalReview})</CardDescription>

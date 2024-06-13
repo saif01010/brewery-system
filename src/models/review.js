@@ -1,5 +1,4 @@
 import mongoose, {Schema} from "mongoose";
-import { number } from "zod";
 
 const reviewSchema = new Schema({
     rating:{

@@ -13,7 +13,7 @@ async function breweryById(id) {
   const url = `https://api.openbrewerydb.org/v1/breweries?by_ids=${id}`;
   try {
     const response = await axios.get(url);
-    return response.data[0]; // Assuming the API returns an array of breweries
+    return response.data[0];
     } catch (e) {
       throw new Error(e.message);
       }
@@ -23,7 +23,7 @@ async function breweryById(id) {
 const Brewery = () => {
   const [brewery, setBrewery] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -57,11 +57,6 @@ const Brewery = () => {
 
     fetchReviews();
   }, [id]);
-
-  if (!session) {
-    router.push('/sign-in');
-    return;
-  }
 
   const avgRating = (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(2);
   const lenght1 = reviews.length
@@ -113,6 +108,7 @@ const Brewery = () => {
                 color2={'#ffd700'}
                 value={rating}
                 onChange={setRating}
+                half={false}
               />
             </div>
 

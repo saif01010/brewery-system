@@ -7,10 +7,13 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 
 const LoginPage = () => {
     const router = useRouter()
+    const [isSubmiting,setIsSubmiting] = useState(false)
     const {toast} = useToast()
     const form = useForm({
       defaultValues:{
@@ -20,6 +23,7 @@ const LoginPage = () => {
     })
 
     const onSubmit = async (data) => {
+      setIsSubmiting(true)
       const result = await signIn('credentials',{
               redirect: false,
               email: data.email,
@@ -32,6 +36,7 @@ const LoginPage = () => {
           description: result.error,
           variant: 'destructive'
         })
+        setIsSubmiting(false)
       }
       if(result?.ok){
         toast({
@@ -39,6 +44,7 @@ const LoginPage = () => {
           description: result.status,
           variant: 'default'
         })
+        setIsSubmiting(false)
         router.replace('/home')
       }
 
@@ -79,7 +85,12 @@ const LoginPage = () => {
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit">Sign In</Button>
+            <Button className='w-full' type="submit">{isSubmiting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ):('Sign In')}</Button>
           </form>
         </Form>
       
