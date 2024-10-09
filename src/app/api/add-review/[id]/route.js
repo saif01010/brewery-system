@@ -12,14 +12,20 @@ export async function POST(req,ids) {
     const {rating,description} = await req.json();
     console.log(rating,description)
     const session = await getServerSession(authOptions)
-    console.log(session);
+    // console.log(session);
     const user = session?.user;
     if(!user){
         return Response.json({success:false,message:'User not found'},{status:400})
     }
     const username = user.fullName;
+
     try {
         const numRating = parseInt(rating)
+        const hasUserReviewed = await Review.findOne({breweryId:breweryId,user:username});
+        if(hasUserReviewed){
+            console.log('User already reviewed',hasUserReviewed)
+            return Response.json({success:true,message:'User already reviewed'},{status:403})
+        }
         const review = new Review({
             breweryId:breweryId,
             user:username,

@@ -1,11 +1,12 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { ReviewCard } from '@/components/ReviewCard'; // Ensure this is correctly imported
 import { RatingCard } from '@/components/Rating';
 import ReactStars from 'react-stars';
+import { useToast } from '@/components/ui/use-toast';
 
 
 
@@ -28,6 +29,8 @@ const Brewery = () => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const {toast} = useToast();
+  const [fetchTrigger, setFetchTrigger] = useState(false);
   
   useEffect(() => {
     async function fetchBreweryData() {
@@ -55,11 +58,11 @@ const Brewery = () => {
     }
 
     fetchReviews();
-  }, [id]);
+  }, [id, fetchTrigger]);
 
   const avgRating = (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(2);
   const lenght1 = reviews.length
-
+  console.log(reviews)
   
   // console.log(avgRating)
   const handleReviewSubmit = async (e) => {
@@ -71,10 +74,31 @@ const Brewery = () => {
         rating,
         description
       });
-      console.log(response.data)
+
+      console.log(response.status)
+      if (response.status == 200){
+        toast({
+          title: 'Review added successfully',
+          description: 'Your review has been added successfully.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+
+      } 
       setReviews([ response.data , ...reviews]);
+      setFetchTrigger(prev => !prev);
+      //fetch the reviews again without calling the api
+      
     } catch (e) {
-      console.error('Failed to submit review', e);
+      console.error('Failed to add review', e);
+      toast({
+        title: 'Failed to add review',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
